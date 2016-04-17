@@ -17,7 +17,7 @@
       <div class="row">
         <div class="col-md-4 col-md-offset-4 btn-group-vertical">
           <a href="registro.php" class="btn btn-primary">Registro</a>
-          <a href="seleccion.php" class="btn btn-primary">Selecci&oacute;n de actividades</a>
+          <a href="seleccionLogin.php" class="btn btn-primary">Selecci&oacute;n de actividades</a>
           <a href=# class="btn btn-primary">P&aacute;gina del congreso</a>
         </div>
       </div>

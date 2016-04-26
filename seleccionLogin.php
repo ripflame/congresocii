@@ -20,14 +20,14 @@
       <div class="row">
         <div class="col-md-4 col-md-offset-4">
           <h3 class="text-center">Escribe el folio y clave ubicados en tu boleto</h3>
-          <form action="#" method="post">
+          <form action="seleccion.php" method="post">
             <div class="form-group">
               <label for="folio">Folio</label>
               <input value="" type="text" id="folio" name="folio" class="form-control">
             </div>
             <div class="form-group">
               <label for="clave">Clave</label>
-              <input value="" type="text" id="clave" name="clave" class="form-control">
+              <input value="" type="password" id="clave" name="clave" class="form-control">
             </div>
             <a href="index.php" class="btn btn-default">Regresar</a>
             <button type="submit" class="btn btn-primary pull-right">Entrar</button>

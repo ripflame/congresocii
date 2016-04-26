@@ -14,6 +14,7 @@
       <div class="row">
         <div class="col-md-6 col-md-offset-3 page-header">
           <h1 class="text-center">Congreso de ingenier&iacute;a e innovaci&oacute;n</h1>
+          <h4 class="text-center">Registro al congreso.</h4>
         </div>
       </div>
       <div class="row">

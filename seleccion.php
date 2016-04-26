@@ -82,6 +82,38 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-md-4 col-md-offset-2">
+            <h4 class="text-center">D&iacute;a Jueves</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4">
+            <div class="form-group">
+              <label for="taller">Taller</label>
+              <select class="form-control" name="id" id="taller">
+                <option value="1">Taller 1</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-2">
+            <h4 class="text-center">D&iacute;a Viernes</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4">
+            <div class="form-group">
+              <label for="ac_viernes">Actividad</label>
+              <select class="form-control" name="id" id="ac_viernes">
+                <option value="1">Visita</option>
+                <option value="2">Concurso - Participante</option>
+                <option value="3">Concurso - Expectador</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-md-4 col-md-offset-4">
             <a href="index.php" class="btn btn-default">Regresar</a>
             <button type="submit" class="btn btn-primary pull-right">Entrar</button>
@@ -91,9 +123,9 @@
     </div>
     <script type="text/javascript">
       $('.input-group.date').datepicker({
-          format: "dd/mm/yyyy",
-          startView: 2,
-          autoclose: true
+        format: "dd/mm/yyyy",
+        startView: 2,
+        autoclose: true
       });
     </script>
   </body>

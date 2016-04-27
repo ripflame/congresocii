@@ -29,7 +29,7 @@
             </div>
             <div class="form-group">
               <label for="ap_paterno">Apellido paterno</label>
-              <input value="" type="text" id="ap_paterno" name="ap_materno" class="form-control">
+              <input value="" type="text" id="ap_paterno" name="ap_paterno" class="form-control">
             </div>
             <div class="form-group">
               <label for="ap_materno">Apellido materno</label>

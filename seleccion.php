@@ -2,27 +2,38 @@
   include_once "config.php";
 
   $talleres = $db->taller();
-  $visitas = $db->visita();
+  $visitas  = $db->visita();
 
   if (isset($_POST['submit'])){
     session_start();
     extract($_POST, EXTR_PREFIX_ALL, "form");
     $participante = $db->participante();
     $data = array(
-      "nombre" => $form_nombre,
+      "nombre"     => $form_nombre,
       "ap_paterno" => $form_ap_paterno,
       "ap_materno" => $form_ap_materno,
       "nacimiento" => $form_nacimiento,
-      "sexo" => $form_sexo,
-      "email" => $form_correo,
-      "escuela" => $form_escuela,
-      "carrera" => $form_carrera,
-      "semestre" => $form_semestre,
-      "folio_id" => $_SESSION['folio'],
-      "taller_id" => $form_taller,
-      "visita_id" => $form_ac_viernes
+      "sexo"       => $form_sexo,
+      "email"      => $form_correo,
+      "escuela"    => $form_escuela,
+      "carrera"    => $form_carrera,
+      "semestre"   => $form_semestre,
+      "folio_id"   => $_SESSION['folio'],
+      "taller_id"  => $form_taller,
+      "visita_id"  => $form_ac_viernes
     );
     $result = $participante->insert($data);
+
+    if ($result) {
+      $folio = $db->folio->where("id LIKE ?", $_SESSION['folio']);
+      $data  = array(
+        "registrado" => '1'
+      );
+      $success = $folio->update($data);
+      if ($success) {
+        header( "Location: index.php" );
+      }
+    }
   }
 ?>
 <!DOCTYPE html>
@@ -69,7 +80,7 @@
             <div class="form-group">
               <label for="nacimiento">Fecha de nacimiento</label>
               <div class="input-group date">
-                <input type="text" class="form-control" name="nacimiento" pattern="^\d{4}\/(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])$" maxlength="10" data-error="Selecciona tu fecha de nacimiento" required><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                <input type="text" class="form-control" name="nacimiento" pattern="^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$" maxlength="10" data-error="Selecciona tu fecha de nacimiento" required><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
               </div>
               <div class="help-block with-errors"></div>
             </div>
@@ -162,7 +173,7 @@
     </div>
     <script type="text/javascript">
       $('.input-group.date').datepicker({
-        format: "yyyy/mm/dd",
+        format: "yyyy-mm-dd",
         startView: 2,
         autoclose: true
       });

@@ -11,7 +11,7 @@ if (isset($_POST['submit'])) {
     $login_error = true;
   }
   foreach($result as $folio) {
-    if ($folio == $form_folio && $folio['clave'] == $form_clave) {
+    if ($folio == $form_folio && $folio['clave'] == $form_clave && !$folio['registrado']) {
       session_start();
       $_SESSION['folio'] = $folio['id'];
       header('Location: seleccion.php');
@@ -46,7 +46,7 @@ if (isset($_POST['submit'])) {
         <div class="col-md-4 col-md-offset-4">
           <h3 class="text-center">Escribe el folio y clave ubicados en tu boleto</h3>
           <?php if ($login_error): ?>
-          <p class="text-center text-danger">El folio o la clave son incorrectos</p>
+          <p class="text-center text-danger">El folio o la clave son incorrectos o este folio ya ha sido registrado antes</p>
           <?php endif; ?>
           <form action="" method="post" data-toggle="validator">
             <div class="form-group">

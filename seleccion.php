@@ -1,3 +1,30 @@
+<?php
+  include_once "config.php";
+
+  $talleres = $db->taller();
+  $visitas = $db->visita();
+
+  if (isset($_POST['submit'])){
+    session_start();
+    extract($_POST, EXTR_PREFIX_ALL, "form");
+    $participante = $db->participante();
+    $data = array(
+      "nombre" => $form_nombre,
+      "ap_paterno" => $form_ap_paterno,
+      "ap_materno" => $form_ap_materno,
+      "nacimiento" => $form_nacimiento,
+      "sexo" => $form_sexo,
+      "email" => $form_correo,
+      "escuela" => $form_escuela,
+      "carrera" => $form_carrera,
+      "semestre" => $form_semestre,
+      "folio_id" => 1,
+      "taller_id" => $form_taller,
+      "visita_id" => $form_ac_viernes
+    );
+    $result = $participante->insert($data);
+  }
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -19,7 +46,7 @@
           <h4 class="text-center">Selecci&oacute;n de actividades</h4>
         </div>
       </div>
-      <form action="#" method="post" class="panel">
+      <form action="" method="post" class="panel">
         <div class="row">
           <div class="col-md-4 col-md-offset-4">
             <h3 class="text-center">Llena esta secci&oacute;n con tus datos personales</h3>
@@ -38,13 +65,13 @@
             <div class="form-group">
               <label for="nacimiento">Fecha de nacimiento</label>
               <div class="input-group date">
-                <input type="text" class="form-control" disabled><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                <input type="text" class="form-control" name="nacimiento" readonly><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
               </div>
             </div>
             <div class="form-group">
               <label for="sexo">Sexo</label>
-              <label class="radio-inline"> <input type="radio" name="sexo" value="hombre" checked> Hombre </label>
-              <label class="radio-inline"> <input type="radio" name="sexo" value="mujer"> Mujer </label>
+              <label class="radio-inline"> <input type="radio" name="sexo" value="1" checked> Hombre </label>
+              <label class="radio-inline"> <input type="radio" name="sexo" value="2"> Mujer </label>
             </div>
             <div class="form-group">
               <label for="correo">Correo electr&oacute;nico</label>
@@ -56,7 +83,7 @@
             </div>
             <div class="form-group">
               <label for="carrera">Carrera</label>
-              <input value="" type="text" class="form-control" name="escuela" id="escuela">
+              <input value="" type="text" class="form-control" name="carrera" id="carrera">
             </div>
             <div class="form-group">
               <label for="semestre">Semestre</label>
@@ -71,7 +98,7 @@
                 <option value="8">8</option>
                 <option value="9">9</option>
                 <option value="10">10</option>
-                <option value="11">Egresado</option>
+                <option value="Egresado">Egresado</option>
               </select>
             </div>
           </div>
@@ -90,8 +117,10 @@
           <div class="col-md-4 col-md-offset-4">
             <div class="form-group">
               <label for="taller">Taller</label>
-              <select class="form-control" name="id" id="taller">
-                <option value="1">Taller 1</option>
+              <select class="form-control" name="taller" id="taller">
+                <?php foreach ($talleres as $taller): ?>
+                <option value="<?php echo $taller['id']; ?>"><?php echo $taller['nombre']; ?></option>
+                <?php endforeach; ?>
               </select>
             </div>
           </div>
@@ -105,25 +134,28 @@
           <div class="col-md-4 col-md-offset-4">
             <div class="form-group">
               <label for="ac_viernes">Actividad</label>
-              <select class="form-control" name="id" id="ac_viernes">
-                <option value="1">Visita</option>
-                <option value="2">Concurso - Participante</option>
-                <option value="3">Concurso - Expectador</option>
+              <select class="form-control" name="ac_viernes" id="ac_viernes">
+                <!-- <option value="1">Visita</option> -->
+                <?php foreach ($visitas as $visita): ?>
+                <option value="<?php echo $visita['id']; ?>">Visita - <?php echo $visita['empresa']; ?></option>
+                <?php endforeach; ?>
+                <option value="100">Concurso - Participante</option>
+                <option value="101">Concurso - Expectador</option>
               </select>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-4 col-md-offset-4">
-            <a href="index.php" class="btn btn-default">Regresar</a>
-            <button type="submit" class="btn btn-primary pull-right">Entrar</button>
+            <a href="seleccionLogin.php" class="btn btn-default">Regresar</a>
+            <button type="submit" name="submit" class="btn btn-primary pull-right">Entrar</button>
           </div>
         </div>
       </form>
     </div>
     <script type="text/javascript">
       $('.input-group.date').datepicker({
-        format: "dd/mm/yyyy",
+        format: "yyyy/mm/dd",
         startView: 2,
         autoclose: true
       });

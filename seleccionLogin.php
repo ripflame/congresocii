@@ -1,3 +1,27 @@
+<?php
+include_once "config.php";
+
+$login_error = false;
+
+if (isset($_POST['submit'])) {
+  extract($_POST, EXTR_PREFIX_ALL, "form");
+
+  $result = $db->folio->where("id LIKE ?", $form_folio);
+  if(count($result) <= 0){
+    $login_error = true;
+  }
+  foreach($result as $folio) {
+    if ($folio == $form_folio && $folio['clave'] == $form_clave) {
+      session_start();
+      $_SESSION['folio'] = $folio['id'];
+      header('Location: seleccion.php');
+      exit();
+    } else {
+      $login_error = true;
+    }
+  }
+}
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -20,7 +44,10 @@
       <div class="row">
         <div class="col-md-4 col-md-offset-4">
           <h3 class="text-center">Escribe el folio y clave ubicados en tu boleto</h3>
-          <form action="seleccion.php" method="post">
+          <?php if ($login_error): ?>
+          <p class="text-center text-danger">El folio o la clave son incorrectos</p>
+          <?php endif; ?>
+          <form action="" method="post">
             <div class="form-group">
               <label for="folio">Folio</label>
               <input value="" type="text" id="folio" name="folio" class="form-control">
@@ -30,7 +57,7 @@
               <input value="" type="password" id="clave" name="clave" class="form-control">
             </div>
             <a href="index.php" class="btn btn-default">Regresar</a>
-            <button type="submit" class="btn btn-primary pull-right">Entrar</button>
+            <button type="submit" class="btn btn-primary pull-right" name="submit">Entrar</button>
           </form>
         </div>
       </div>

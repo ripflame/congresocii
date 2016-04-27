@@ -18,7 +18,7 @@
       "escuela" => $form_escuela,
       "carrera" => $form_carrera,
       "semestre" => $form_semestre,
-      "folio_id" => 1,
+      "folio_id" => $_SESSION['folio'],
       "taller_id" => $form_taller,
       "visita_id" => $form_ac_viernes
     );
@@ -135,7 +135,6 @@
             <div class="form-group">
               <label for="ac_viernes">Actividad</label>
               <select class="form-control" name="ac_viernes" id="ac_viernes">
-                <!-- <option value="1">Visita</option> -->
                 <?php foreach ($visitas as $visita): ?>
                 <option value="<?php echo $visita['id']; ?>">Visita - <?php echo $visita['empresa']; ?></option>
                 <?php endforeach; ?>

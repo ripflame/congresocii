@@ -1,39 +1,70 @@
 <?php
+  session_start();
+  if (!isset($_SESSION['folio'])) {
+    header("Location: index.php");
+  }
+
   include_once "config.php";
+
+  $error_overflow_taller = false;
+  $error_overflow_visita = false;
 
   $talleres = $db->taller();
   $visitas  = $db->visita();
 
   if (isset($_POST['submit'])){
-    session_start();
     extract($_POST, EXTR_PREFIX_ALL, "form");
-    $participante = $db->participante();
-    $data = array(
-      "nombre"     => $form_nombre,
-      "ap_paterno" => $form_ap_paterno,
-      "ap_materno" => $form_ap_materno,
-      "nacimiento" => $form_nacimiento,
-      "sexo"       => $form_sexo,
-      "email"      => $form_correo,
-      "escuela"    => $form_escuela,
-      "carrera"    => $form_carrera,
-      "semestre"   => $form_semestre,
-      "folio_id"   => $_SESSION['folio'],
-      "taller_id"  => $form_taller,
-      "visita_id"  => $form_ac_viernes
-    );
-    $result = $participante->insert($data);
+    $talleres = $db->taller();
+    $visitas  = $db->visita();
 
-    if ($result) {
-      $folio = $db->folio->where("id LIKE ?", $_SESSION['folio']);
-      $data  = array(
-        "registrado" => '1'
+    $talleres_available = $talleres[$form_taller]['cupo_disponible'] - $talleres[$form_taller]['inscritos'] > 0;
+    $visitas_available = $visitas[$form_ac_viernes]['cupo_disponible'] - $visitas[$form_ac_viernes]['inscritos'] > 0;
+
+    if ($talleres_available && $visitas_available) {
+      $taller_data = array(
+        "inscritos" => $talleres[$form_taller]['inscritos'] + 1
       );
-      $success = $folio->update($data);
-      if ($success) {
-        header( "Location: index.php" );
+      $taller_result = $talleres[$form_taller]->update($taller_data);
+
+      $visitas_data = array(
+        "inscritos" => $visitas[$form_ac_viernes]['inscritos'] + 1
+      );
+      $visitas_result = $visitas[$form_ac_viernes]->update($visitas_data);
+
+      $participante = $db->participante();
+      $data = array(
+        "nombre"     => $form_nombre,
+        "ap_paterno" => $form_ap_paterno,
+        "ap_materno" => $form_ap_materno,
+        "nacimiento" => $form_nacimiento,
+        "sexo"       => $form_sexo,
+        "email"      => $form_correo,
+        "escuela"    => $form_escuela,
+        "carrera"    => $form_carrera,
+        "semestre"   => $form_semestre,
+        "folio_id"   => $_SESSION['folio'],
+        "taller_id"  => $form_taller,
+        "visita_id"  => $form_ac_viernes
+      );
+      $result = $participante->insert($data);
+
+      if ($result) {
+        $folio = $db->folio->where("id LIKE ?", $_SESSION['folio']);
+        $data  = array(
+          "registrado" => '1'
+        );
+        $success = $folio->update($data);
+        if ($success) {
+          session_destroy();
+          header( "Location: index.php" );
+        }
       }
+    } else if(!$talleres_available) {
+      $error_overflow_taller = true;
+    } else if (!$visitas_available) {
+      $error_overflow_visita = true;
     }
+
   }
 ?>
 <!DOCTYPE html>
@@ -58,10 +89,16 @@
           <h4 class="text-center">Selecci&oacute;n de actividades</h4>
         </div>
       </div>
-      <form action="" method="post" class="panel" data-toggle="validator">
+      <form action="" method="post" class="panel" id="registerForm" data-toggle="validator">
         <div class="row">
           <div class="col-md-4 col-md-offset-4">
             <h3 class="text-center">Llena esta secci&oacute;n con tus datos personales</h3>
+            <?php if ($error_overflow_taller) : ?>
+            <h3 class="text-center text-danger">Ya no hay cupo para el taller que elegiste</h3>
+            <?php endif; ?>
+            <?php if ($error_overflow_visita) : ?>
+            <h3 class="text-center text-danger">Ya no hay cupo para la actividad del viernes que elegiste</h3>
+            <?php endif; ?>
             <div class="form-group">
               <label for="nombre">Nombre</label>
               <input value="" type="text" id="nombre" name="nombre" class="form-control" data-error="Ingresa tu nombre" required>
@@ -166,7 +203,7 @@
         <div class="row">
           <div class="col-md-4 col-md-offset-4">
             <a href="seleccionLogin.php" class="btn btn-default">Regresar</a>
-            <button type="submit" name="submit" class="btn btn-primary pull-right">Entrar</button>
+            <button type="submit" name="submit" id="submit" class="btn btn-primary pull-right">Entrar</button>
           </div>
         </div>
       </form>

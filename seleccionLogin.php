@@ -31,6 +31,7 @@ if (isset($_POST['submit'])) {
     <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="bootstrap-validator/dist/validator.min.js" type="text/javascript"></script>
     <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
   </head>
   <body>
@@ -47,14 +48,16 @@ if (isset($_POST['submit'])) {
           <?php if ($login_error): ?>
           <p class="text-center text-danger">El folio o la clave son incorrectos</p>
           <?php endif; ?>
-          <form action="" method="post">
+          <form action="" method="post" data-toggle="validator">
             <div class="form-group">
               <label for="folio">Folio</label>
-              <input value="" type="text" id="folio" name="folio" class="form-control">
+              <input value="" type="number" id="folio" name="folio" class="form-control" data-error="Ingresa el folio de tu boleto" required>
+              <div class="help-block with-errors"></div>
             </div>
             <div class="form-group">
               <label for="clave">Clave</label>
-              <input value="" type="password" id="clave" name="clave" class="form-control">
+              <input value="" type="password" id="clave" name="clave" class="form-control" data-error="Ingresa la clave de tu boleto" required>
+              <div class="help-block with-errors"></div>
             </div>
             <a href="index.php" class="btn btn-default">Regresar</a>
             <button type="submit" class="btn btn-primary pull-right" name="submit">Entrar</button>

@@ -7,3 +7,6 @@
 [submodule "notorm"]
 	path = notorm
 	url = git@github.com:vrana/notorm.git
+[submodule "bootstrap-validator"]
+	path = bootstrap-validator
+	url = git@github.com:1000hz/bootstrap-validator.git

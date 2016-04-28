@@ -191,11 +191,11 @@
             <div class="form-group">
               <label for="ac_viernes">Actividad</label>
               <select class="form-control" name="ac_viernes" id="ac_viernes">
+                <option value="100">Concurso - Participante</option>
+                <option value="101">Concurso - Expectador</option>
                 <?php foreach ($visitas as $visita): ?>
                 <option value="<?php echo $visita['id']; ?>">Visita - <?php echo $visita['empresa']; ?></option>
                 <?php endforeach; ?>
-                <option value="100">Concurso - Participante</option>
-                <option value="101">Concurso - Expectador</option>
               </select>
             </div>
           </div>

@@ -1,24 +1,17 @@
 <?php
-include_once "config.php";
+include_once "db_controller.php";
 
 $login_error = false;
 
 if (isset($_POST['submit'])) {
   extract($_POST, EXTR_PREFIX_ALL, "form");
 
-  $result = $db->folio->where("id LIKE ?", $form_folio);
-  if(count($result) <= 0){
+  if ( is_valid_folio( $form_folio, $form_clave ) ){
+    $_SESSION['folio'] = $form_folio;
+    header('Location: seleccion.php');
+    exit();
+  } else {
     $login_error = true;
-  }
-  foreach($result as $folio) {
-    if ($folio == $form_folio && $folio['clave'] == $form_clave && !$folio['registrado']) {
-      session_start();
-      $_SESSION['folio'] = $folio['id'];
-      header('Location: seleccion.php');
-      exit();
-    } else {
-      $login_error = true;
-    }
   }
 }
 ?>

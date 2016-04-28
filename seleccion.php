@@ -4,68 +4,13 @@
     header("Location: index.php");
   }
 
-  include_once "config.php";
+  include_once "db_controller.php";
 
   $error_overflow_taller = false;
   $error_overflow_visita = false;
 
-  $talleres = $db->taller();
-  $visitas  = $db->visita();
-
-  if (isset($_POST['submit'])){
-    extract($_POST, EXTR_PREFIX_ALL, "form");
-    $talleres = $db->taller();
-    $visitas  = $db->visita();
-
-    $talleres_available = $talleres[$form_taller]['cupo_disponible'] - $talleres[$form_taller]['inscritos'] > 0;
-    $visitas_available = $visitas[$form_ac_viernes]['cupo_disponible'] - $visitas[$form_ac_viernes]['inscritos'] > 0;
-
-    if ($talleres_available && $visitas_available) {
-      $taller_data = array(
-        "inscritos" => $talleres[$form_taller]['inscritos'] + 1
-      );
-      $taller_result = $talleres[$form_taller]->update($taller_data);
-
-      $visitas_data = array(
-        "inscritos" => $visitas[$form_ac_viernes]['inscritos'] + 1
-      );
-      $visitas_result = $visitas[$form_ac_viernes]->update($visitas_data);
-
-      $participante = $db->participante();
-      $data = array(
-        "nombre"     => $form_nombre,
-        "ap_paterno" => $form_ap_paterno,
-        "ap_materno" => $form_ap_materno,
-        "nacimiento" => $form_nacimiento,
-        "sexo"       => $form_sexo,
-        "email"      => $form_correo,
-        "escuela"    => $form_escuela,
-        "carrera"    => $form_carrera,
-        "semestre"   => $form_semestre,
-        "folio_id"   => $_SESSION['folio'],
-        "taller_id"  => $form_taller,
-        "visita_id"  => $form_ac_viernes
-      );
-      $result = $participante->insert($data);
-
-      if ($result) {
-        $folio = $db->folio->where("id LIKE ?", $_SESSION['folio']);
-        $data  = array(
-          "registrado" => '1'
-        );
-        $success = $folio->update($data);
-        if ($success) {
-          session_destroy();
-          header( "Location: index.php" );
-        }
-      }
-    } else if(!$talleres_available) {
-      $error_overflow_taller = true;
-    } else if (!$visitas_available) {
-      $error_overflow_visita = true;
-    }
-
-  }
+  $talleres = get_talleres();
+  $visitas  = get_visitas();
 ?>
 <!DOCTYPE html>
 <html>

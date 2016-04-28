@@ -18,6 +18,32 @@
   }
 
   function get_talleres() {
-    
+    global $db;
+
+    $query = "SELECT * FROM `taller`";
+    $result = $db->query( $query );
+
+    $talleres = array();
+
+    while ($row = $result->fetch_assoc()) {
+      $talleres[] = $row;
+    }
+
+    return $talleres;
+  }
+
+  function get_visitas() {
+    global $db;
+
+    $query = "SELECT * FROM `visita`";
+    $result = $db->query( $query );
+
+    $visitas = array();
+
+    while($row = $result->fetch_assoc()) {
+      $visitas[] = $row;
+    }
+
+    return $visitas;
   }
 ?>

@@ -15,7 +15,7 @@
         <h1 class="text-center">Congreso de ingenier&iacute;a e innovaci&oacute;n</h1>
       </div>
       <div class="row">
-        <div class="col-md-4 col-md-offset-4 btn-group-vertical">
+        <div class="col-sm-4 col-sm-offset-4 btn-group-vertical">
           <a href="registro.php" class="btn btn-primary">Registro</a>
           <a href="seleccionLogin.php" class="btn btn-primary">Selecci&oacute;n de actividades</a>
           <a href=# class="btn btn-primary">P&aacute;gina del congreso</a>

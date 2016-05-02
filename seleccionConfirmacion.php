@@ -21,12 +21,6 @@ if ( isset( $_SESSION['folio'] ) ) {
     <script src="bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="bootstrap-validator/dist/validator.min.js" type="text/javascript"></script>
     <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
-
-    <?php if ($redirect): ?>
-    <script type="text/javascript">
-      window.open("http://google.com");
-    </script>
-    <?php endif; ?>
   </head>
   <body>
     <div class="container panel">

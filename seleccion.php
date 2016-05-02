@@ -198,7 +198,7 @@
               <label for="taller">Taller</label>
               <select class="form-control" name="taller" id="taller">
                 <?php foreach ($talleres as $taller): ?>
-                <option value="<?php echo $taller['id']; ?>" <?php if ($form_taller == $taller['id']) echo "selected"?>><?php echo $taller['nombre']; ?></option>
+                <option value="<?php echo $taller['id']; ?>" <?php if ($form_taller == $taller['id']) echo "selected"?>><?php echo $taller['nombre']; ?>  [<?php echo $taller['cupo_disponible'] - $taller['inscritos']; ?>]</option>
                 <?php endforeach; ?>
               </select>
             </div>
@@ -214,11 +214,11 @@
             <div class="form-group">
               <label for="ac_viernes">Actividad</label>
               <select class="form-control" name="ac_viernes" id="ac_viernes">
-                <option value="100">Concurso - Participante</option>
-                <option value="101">Concurso - Expectador</option>
+                <option value="100" <?php if (100 == $form_ac_viernes) echo "selected"; ?>>Concurso - Participante</option>
+                <option value="101" <?php if (101 == $form_ac_viernes) echo "selected"; ?>>Concurso - Expectador</option>
                 <?php foreach ($visitas as $visita): ?>
-                <?php if ($visita['id'] < 100) : ?>
-                <option value="<?php echo $visita['id']; ?>" <?php if ($form_ac_viernes == $visita['id']) echo "selected"; ?>>Visita - <?php echo $visita['empresa']; ?></option>
+                <?php if ($visita['id'] != 100 && $visita['id'] != 101): ?>
+                <option value="<?php echo $visita['id']; ?>" <?php if ($form_ac_viernes == $visita['id']) echo "selected"; ?>>Visita - <?php echo $visita['empresa']; ?> [<?php echo $visita['cupo_disponible'] - $visita['inscritos']; ?>]</option>
                 <?php endif; ?>
                 <?php endforeach; ?>
               </select>

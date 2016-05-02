@@ -3,14 +3,11 @@ include_once "config.php";
 
 session_start();
 
-$redirect = false;
-
 if ( isset( $_SESSION['folio'] ) ) {
   $participante = $db->participante->where("participante.folio_id LIKE ?", $_SESSION['folio'])->fetch();
-  if ($participante->visita['id'] == 100) {
-    $redirect = true;
-  }
   session_destroy();
+} else {
+  header("Location: index.php");
 }
 ?>
 <!DOCTYPE html>

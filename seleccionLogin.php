@@ -60,7 +60,7 @@ if (isset($_POST['submit'])) {
               <div class="help-block with-errors"></div>
             </div>
             <a href="index.php" class="btn btn-default">Regresar</a>
-            <button type="submit" class="btn btn-primary pull-right" name="submit">Entrar</button>
+            <button type="submit" class="btn btn-primary pull-right" name="submit">Guardar</button>
           </form>
         </div>
       </div>

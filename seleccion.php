@@ -1,10 +1,10 @@
 <?php
+  include_once "config.php";
+
   session_start();
   if (!isset($_SESSION['folio'])) {
     header("Location: index.php");
   }
-
-  include_once "config.php";
 
   $error_overflow_taller = false;
   $error_overflow_visita = false;
@@ -61,7 +61,6 @@
         );
         $success = $folio->update($data);
         if ($success) {
-          session_destroy();
           header( "Location: seleccionConfirmacion.php" );
         }
       }
@@ -229,7 +228,7 @@
         <div class="row">
           <div class="col-sm-4 col-sm-offset-4">
             <a href="seleccionLogin.php" class="btn btn-default">Regresar</a>
-            <button type="submit" name="submit" id="submit" class="btn btn-primary pull-right">Entrar</button>
+            <button type="submit" name="submit" id="submit" class="btn btn-primary pull-right">Guardar</button>
           </div>
         </div>
       </form>
@@ -241,6 +240,22 @@
             $('#pitch_name').fadeIn('slow');
           } else {
             $('#pitch_name').fadeOut('slow');
+          }
+        });
+        if( $("#ac_viernes").val() == 100){
+          $("#submit").on('click', function(e) {
+            window.open("http://google.com", "_blank");
+          });
+        } else {
+          $("#submit").unbind('click');
+        }
+        $('#ac_viernes').on('change', function() {
+          if( $("#ac_viernes").val() == 100){
+            $("#submit").on('click', function(e) {
+              window.open("http://google.com", "_blank");
+            });
+          } else {
+            $("#submit").unbind('click');
           }
         });
       });

@@ -1,3 +1,18 @@
+<?php
+include_once "config.php";
+
+session_start();
+
+$redirect = false;
+
+if ( isset( $_SESSION['folio'] ) ) {
+  $participante = $db->participante->where("participante.folio_id LIKE ?", $_SESSION['folio'])->fetch();
+  if ($participante->visita['id'] == 100) {
+    $redirect = true;
+  }
+  session_destroy();
+}
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -9,6 +24,12 @@
     <script src="bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="bootstrap-validator/dist/validator.min.js" type="text/javascript"></script>
     <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+
+    <?php if ($redirect): ?>
+    <script type="text/javascript">
+      window.open("http://google.com");
+    </script>
+    <?php endif; ?>
   </head>
   <body>
     <div class="container panel">
@@ -42,10 +63,10 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>90</td>
-                  <td>Gilberto Andrés León Enríquez</td>
-                  <td>1990-12-25</td>
-                  <td>gilberto.leon990@gmail.com</td>
+                  <td><?php echo $participante->folio['id']; ?></td>
+                  <td><?php echo $participante['nombre']; ?></td>
+                  <td><?php echo $participante['nacimiento']; ?></td>
+                  <td><?php echo $participante['email']; ?></td>
                 </tr>
               </tbody>
             </table>
@@ -70,9 +91,9 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Universidad Modelo</td>
-                  <td>Ingeniería Mecatrónica</td>
-                  <td>4</td>
+                  <td><?php echo $participante['escuela']; ?></td>
+                  <td><?php echo $participante['carrera']; ?></td>
+                  <td><?php echo $participante['semestre']; ?></td>
                 </tr>
               </tbody>
             </table>
@@ -95,7 +116,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Fuck up nights!</td>
+                  <td><?php echo $participante['titulo_pitch'] == ""? "No Participa": $participante['titulo_pitch']; ?></td>
                 </tr>
               </tbody>
             </table>
@@ -120,9 +141,9 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Aquila</td>
-                  <td>Aprende cómo desarrollar tu propias aplicaciones de internet de las cosas, Inventa tus propios aparatos o adapta los ya existentes con la ayuda de Altair: la placa de desarrollo inalámbrica programable.</td>
-                  <td>3:00</td>
+                  <td><?php echo $participante->taller['nombre']; ?></td>
+                  <td><?php echo $participante->taller['descripcion']; ?></td>
+                  <td><?php echo $participante->taller['duracion']; ?></td>
                 </tr>
               </tbody>
             </table>
@@ -147,9 +168,9 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Dondé</td>
-                  <td>7:00</td>
-                  <td>6:00</td>
+                  <td><?php echo $participante->visita['empresa']; ?></td>
+                  <td><?php echo $participante->visita['hora_inicio']; ?></td>
+                  <td><?php echo $participante->visita['duracion']; ?></td>
                 </tr>
               </tbody>
             </table>
@@ -158,7 +179,7 @@
       </div>
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
-          <a href="index.php" class="btn btn-default">Regresar</a>
+          <a href="index.php" class="btn btn-primary pull-right">Aceptar</a>
         </div>
       </div>
     </div>

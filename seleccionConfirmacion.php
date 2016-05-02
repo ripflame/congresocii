@@ -179,9 +179,17 @@ if ( isset( $_SESSION['folio'] ) ) {
       </div>
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
-          <a href="index.php" class="btn btn-primary pull-right">Aceptar</a>
+          <button id="print" class="btn btn-success hidden-print"> <span class="glyphicon glyphicon-print"></span> Imprimir </button>
+          <a href="index.php" class="btn btn-primary pull-right hidden-print">Aceptar</a>
         </div>
       </div>
     </div>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $("#print").on('click', function() {
+          window.print();
+        });
+      });
+    </script>
   </body>
 </html>

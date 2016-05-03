@@ -16,6 +16,11 @@ if (isset($_POST['submit'])) {
       $_SESSION['folio'] = $folio['id'];
       header('Location: seleccion.php');
       exit();
+    } elseif ($folio == $form_folio && $folio['clave'] == $form_clave && $folio['registrado']) {
+      session_start();
+      $_SESSION['folio'] = $folio['id'];
+      header('Location: seleccionConfirmacion.php');
+      exit();
     } else {
       $login_error = true;
     }

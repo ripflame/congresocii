@@ -8,6 +8,7 @@ if ( isset( $_SESSION['folio'] ) ) {
   session_destroy();
 } else {
   header("Location: index.php");
+  exit();
 }
 ?>
 <!DOCTYPE html>

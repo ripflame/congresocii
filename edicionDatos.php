@@ -5,9 +5,6 @@
   if (!isset($_SESSION['folio'])) {
     header("Location: index.php");
   } else {
-    $talleres = $db->taller();
-    $visitas  = $db->visita();
-
     $participante = $db->participante->where("participante.folio_id LIKE ?", $_SESSION['folio'])->fetch();
 
     if ( isset($_POST['submit'])) {

@@ -56,7 +56,7 @@ if ( isset( $_SESSION['folio'] ) ) {
               <tbody>
                 <tr>
                   <td><?php echo $participante->folio['id']; ?></td>
-                  <td><?php echo $participante['nombre']; ?></td>
+                  <td><?php echo "{$participante['nombre']} {$participante['ap_paterno']} {$participante['ap_materno']}"; ?></td>
                   <td><?php echo $participante['nacimiento']; ?></td>
                   <td><?php echo $participante['email']; ?></td>
                 </tr>

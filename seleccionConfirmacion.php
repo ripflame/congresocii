@@ -5,10 +5,9 @@ session_start();
 
 if ( isset( $_SESSION['folio'] ) ) {
   $participante = $db->participante->where("participante.folio_id LIKE ?", $_SESSION['folio'])->fetch();
-  session_destroy();
+  //session_destroy();
 } else {
   header("Location: index.php");
-  exit();
 }
 ?>
 <!DOCTYPE html>
@@ -21,7 +20,12 @@ if ( isset( $_SESSION['folio'] ) ) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="bootstrap-validator/dist/validator.min.js" type="text/javascript"></script>
-    <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+
+    <?php if ($redirect): ?>
+    <script type="text/javascript">
+      window.open("http://google.com");
+    </script>
+    <?php endif; ?>
   </head>
   <body>
     <div class="container panel">
@@ -172,7 +176,7 @@ if ( isset( $_SESSION['folio'] ) ) {
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
           <button id="print" class="btn btn-success hidden-print"> <span class="glyphicon glyphicon-print"></span> Imprimir </button>
-          <a href="index.php" class="btn btn-primary pull-right hidden-print">Aceptar</a>
+          <a href="registrado.php" class="btn btn-primary pull-right hidden-print">Aceptar</a>
         </div>
       </div>
     </div>

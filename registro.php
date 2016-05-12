@@ -7,7 +7,6 @@
     <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
-    <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
   </head>
   <body>
     <div class="container">

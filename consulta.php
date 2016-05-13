@@ -1,12 +1,10 @@
 <?php
 include_once "config.php";
 
- //$taller = $db->taller->fetch();
- 
  $sql = $pdo->prepare('SELECT * FROM taller');
     $sql->execute();
     $resultado = $sql->fetchAll();
-	
+
 	$sql2 = $pdo->prepare('SELECT * FROM visita');
     $sql2->execute();
     $resultado2 = $sql2->fetchAll();
@@ -22,12 +20,6 @@ include_once "config.php";
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="bootstrap-validator/dist/validator.min.js" type="text/javascript"></script>
-
-    <?php if ($redirect): ?>
-    <script type="text/javascript">
-      window.open("http://google.com");
-    </script>
-    <?php endif; ?>
   </head>
   <body>
     <div class="container panel">
@@ -93,12 +85,5 @@ include_once "config.php";
           </div>
         </div>
       </div>
-    <script type="text/javascript">
-      $(document).ready(function(){
-        $("#print").on('click', function() {
-          window.print();
-        });
-      });
-    </script>
   </body>
 </html>

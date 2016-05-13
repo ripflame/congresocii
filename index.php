@@ -15,7 +15,7 @@
       </div>
       <div class="row">
         <div class="col-sm-4 col-sm-offset-4 btn-group-vertical">
-          <a href="#" class="btn btn-primary" disabled>Registro</a>
+          <a href="registroLogin.php" class="btn btn-primary">Registro</a>
           <a href="seleccionLogin.php" class="btn btn-primary">Selecci&oacute;n de actividades</a>
           <a href="http://www.unimodelo.edu.mx/merida/ci+i" target="blank" class="btn btn-primary">P&aacute;gina del congreso</a>
         </div>

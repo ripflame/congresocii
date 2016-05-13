@@ -20,12 +20,6 @@ if ( isset( $_SESSION['folio'] ) ) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="bootstrap-validator/dist/validator.min.js" type="text/javascript"></script>
-
-    <?php if ($redirect): ?>
-    <script type="text/javascript">
-      window.open("http://google.com");
-    </script>
-    <?php endif; ?>
   </head>
   <body>
     <div class="container panel">

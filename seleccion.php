@@ -1,4 +1,12 @@
 <?php
+function search_table($array, $column, $id) {
+  foreach ($array as $row) {
+    if ($row['id'] == $id) {
+      return $row[$column];
+    }
+  }
+}
+
   include_once "config.php";
 
   session_start();
@@ -10,63 +18,70 @@
   $error_overflow_visita = false;
   $error_overflow_qep    = false;
 
-  $talleres = $db->taller();
-  $visitas  = $db->visita();
-  $empresas = $db->qep();
+  $taller_stmt = $pdo->prepare("SELECT * FROM `taller`");
+  $taller_stmt->execute();
+  $talleres = $taller_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  $visita_stmt = $pdo->prepare("SELECT * FROM `visita`");
+  $visita_stmt->execute();
+  $visitas = $visita_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  $qep_stmt = $pdo->prepare("SELECT * FROM `qep`");
+  $qep_stmt->execute();
+  $empresas = $qep_stmt->fetchAll(PDO::FETCH_ASSOC);
 
   if (isset($_POST['submit'])){
     extract($_POST, EXTR_PREFIX_ALL, "form");
-    $talleres = $db->taller();
-    $visitas  = $db->visita();
-    $empresas = $db->qep();
+    $taller_stmt = $pdo->prepare("SELECT * FROM `taller`");
+    $taller_stmt->execute();
+    $talleres = $taller_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $talleres_available = $talleres[$form_taller]['cupo_disponible'] - $talleres[$form_taller]['inscritos'] > 0;
-    $visitas_available  = $visitas[$form_ac_viernes]['cupo_disponible'] - $visitas[$form_ac_viernes]['inscritos'] > 0;
-    $empresas_available = $empresas[$form_qep]['cupo_disponible'] - $empresas[$form_qep]['inscritos'] > 0;
+    $visita_stmt = $pdo->prepare("SELECT * FROM `visita`");
+    $visita_stmt->execute();
+    $visitas = $visita_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $qep_stmt = $pdo->prepare("SELECT * FROM `qep`");
+    $qep_stmt->execute();
+    $empresas = $qep_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $talleres_available = search_table($talleres, 'cupo_disponible', $form_taller) - search_table($talleres, 'inscritos', $form_taller) > 0;
+    $visitas_available  = search_table($visitas, 'cupo_disponible', $form_ac_viernes) - search_table($visitas, 'inscritos', $form_ac_viernes) > 0;
+    $empresas_available = search_table($empresas, 'cupo_disponible', $form_qep) - search_table($empresas, 'inscritos', $form_qep) > 0;
 
     if ($talleres_available && $visitas_available && $empresas_available) {
-      $taller_data = array(
-        "inscritos" => $talleres[$form_taller]['inscritos'] + 1
-      );
-      $taller_result = $talleres[$form_taller]->update($taller_data);
+      $stmt = $pdo->prepare("UPDATE `taller` SET `inscritos`=:inscritos WHERE `id`=:id");
+      $stmt->execute(array(":inscritos"=>search_table($talleres, 'inscritos', $form_taller) + 1, ":id"=>search_table($talleres, 'id', $form_taller)));
 
-      $visitas_data = array(
-        "inscritos" => $visitas[$form_ac_viernes]['inscritos'] + 1
-      );
-      $visitas_result = $visitas[$form_ac_viernes]->update($visitas_data);
+      $stmt = $pdo->prepare("UPDATE `visita` SET `inscritos`=:inscritos WHERE `id`=:id");
+      $stmt->execute(array(":inscritos"=>search_table($visitas, 'inscritos', $form_visita) + 1, ":id"=>search_table($visitas, 'id', $form_visita)));
 
-      $empresas_data = array(
-        "inscritos" => $empresas[$form_qep]['inscritos'] + 1
-      );
-      $empresas_result = $empresas[$form_qep]->update($empresas_data);
+      $stmt = $pdo->prepare("UPDATE `qep` SET `inscritos`=:inscritos WHERE `id`=:id");
+      $stmt->execute(array(":inscritos"=>search_table($empresas, 'inscritos', $form_qep) + 1, ":id"=>search_table($empresas, 'id', $form_qep)));
 
-      $participante = $db->participante();
+      $stmt = $pdo->prepare("INSERT INTO `participante`(`nombre`, `ap_paterno`, `ap_materno`, `nacimiento`, `sexo`, `email`, `escuela`, `carrera`, `semestre`, `folio_id`, `taller_id`, `visita_id`, `qep_id`, `celular`) VALUES(:nombre, :ap_paterno, :ap_materno, :nacimiento, :sexo, :email, :escuela, :carrera, :semestre, :folio_id, :taller_id, :visita_id, :qep_id, :celular)");
       $data = array(
-        "nombre"     => $form_nombre,
-        "ap_paterno" => $form_ap_paterno,
-        "ap_materno" => $form_ap_materno,
-        "nacimiento" => $form_nacimiento,
-        "sexo"       => $form_sexo,
-        "email"      => $form_correo,
-        "escuela"    => $form_escuela,
-        "carrera"    => $form_carrera,
-        "semestre"   => $form_semestre,
-        "folio_id"   => $_SESSION['folio'],
-        "taller_id"  => $form_taller,
-        "visita_id"  => $form_ac_viernes,
-        "concurso_pitch" => isset($form_pitch)? $form_pitch : 0,
-        "titulo_pitch" => isset($form_pitch_name)? $form_pitch_name : "",
-        "qep_id" => $form_qep,
-        "celular" => $form_celular
+        ":nombre"     => $form_nombre,
+        ":ap_paterno" => $form_ap_paterno,
+        ":ap_materno" => $form_ap_materno,
+        ":nacimiento" => $form_nacimiento,
+        ":sexo"       => $form_sexo,
+        ":email"      => $form_correo,
+        ":escuela"    => $form_escuela,
+        ":carrera"    => $form_carrera,
+        ":semestre"   => $form_semestre,
+        ":folio_id"   => $_SESSION['folio'],
+        ":taller_id"  => $form_taller,
+        ":visita_id"  => $form_ac_viernes,
+        ":qep_id" => $form_qep,
+        ":celular" => $form_celular
       );
-      $result = $participante->insert($data);
+      $result = $stmt->execute($data);
 
       if ($result) {
-        $folio = $db->folio->where("id LIKE ?", $_SESSION['folio']);
-        $data  = array(
-          "registrado" => '1'
-        );
-        $success = $folio->update($data);
+        $stmt = $pdo->prepare("UPDATE `folio` SET `registrado`=:registrado WHERE `id`=:id");
+        $data = array(":registrado" => 1, ":id" => $_SESSION['folio']);
+        $success = $stmt->execute($data);
+
         if ($success) {
           header( "Location: seleccionConfirmacion.php" );
         }

@@ -14,7 +14,7 @@
                    $participante['ap_materno'] == $form_ap_materno && $participante['nacimiento'] == $form_nacimiento &&
                    $participante['sexo'] == $form_sexo && $participante['email'] == $form_correo &&
                    $participante['escuela'] == $form_escuela && $participante['carrera'] == $form_carrera &&
-                   $participante['semestre'] == $form_semestre;
+                   $participante['semestre'] == $form_semestre && $participante['celular'] == $form_celular;
 
       if ($noChanges) {
         header( "Location: seleccionConfirmacion.php" );
@@ -32,6 +32,7 @@
         "escuela"        => $form_escuela,
         "carrera"        => $form_carrera,
         "semestre"       => $form_semestre,
+        "celular"        => $form_celular
       );
       $result = $participantes->update($data);
 
@@ -99,6 +100,11 @@
             <div class="form-group">
               <label for="correo">Correo electr&oacute;nico</label>
               <input value="<?php echo $participante['email']; ?>" type="email" class="form-control" name="correo" id="correo" data-error="Correo no v&aacute;lido" required>
+              <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+              <label for="celular">Celular</label>
+              <input value="<?php echo $participante['celular']; ?>" type="number" class="form-control" name="celular" id="celular" data-error="Celular no v&aacute;lido" required>
               <div class="help-block with-errors"></div>
             </div>
             <div class="form-group">

@@ -1,17 +1,21 @@
 <?php
   include_once "config.php";
 
-  $login_error = false;
-  $login_registered = false;
+  $login_error        = false;
+  $login_registered   = false;
+  $login_unregistered = false;
 
   if (isset($_POST['submit'])) {
     $folio = $_POST['folio'];
 
-    $result = $db->participante->where('participante.folio_id LIKE ?', $folio)->fetch();
+    $stmt = $pdo->prepare("SELECT `id`, `registro_evento`, `registrado` FROM `folio` WHERE `id`=:id");
+    $stmt->execute(array(":id"=>$folio));
 
-    if ($result) {
-      if ($result->folio['registro_evento'] != 0) {
+    if ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      if ($result['registro_evento'] != 0) {
         $login_registered = true;
+      } elseif ($result['registrado'] == 0) {
+        $login_unregistered = true;
       } else {
         session_start();
         $_SESSION['folio'] = $folio;
@@ -49,6 +53,9 @@
           <?php endif; ?>
           <?php if ($login_registered): ?>
           <p class="text-center text-danger">El folio ya ha sido registrado</p>
+          <?php endif; ?>
+          <?php if ($login_unregistered): ?>
+          <p class="text-center text-danger">El participante no ha sido registrado</p>
           <?php endif; ?>
           <form action="" method="post">
             <div class="form-group">

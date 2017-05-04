@@ -21,10 +21,8 @@ $folio['id']= $_SESSION['folio'];
         <div class="col-sm-4 col-sm-offset-4 btn-group-vertical">
           <a href="seleccionConfirmacion.php" class="btn btn-primary" >Ver datos de registro</a>
           <a href="edicionDatos.php" class="btn btn-primary" >Editar datos de personales</a>
-          <a href="enviarNatware.php" class="btn btn-primary">Descubrir poderes</a>
           <a href="http://www.unimodelo.edu.mx/merida/ci+i" target="blank" class="btn btn-primary">P&aacute;gina del congreso</a>
           <a href="logout.php" class="btn btn-primary">Salir</a>
-          <h5 class="text-center">Para descubrir tus poderes tu clave de grupo es: <strong> y4ckd</strong></h5>
         </div>
       </div>
     </div>

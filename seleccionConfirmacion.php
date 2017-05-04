@@ -49,6 +49,7 @@ if ( isset( $_SESSION['folio'] ) ) {
                   <th>Nombre</th>
                   <th>Fecha de nacimiento</th>
                   <th>Email</th>
+                  <th>Celular</th>
                 </tr>
               </thead>
               <tbody>
@@ -57,6 +58,7 @@ if ( isset( $_SESSION['folio'] ) ) {
                   <td><?php echo "{$participante['nombre']} {$participante['ap_paterno']} {$participante['ap_materno']}"; ?></td>
                   <td><?php echo $participante['nacimiento']; ?></td>
                   <td><?php echo $participante['email']; ?></td>
+                  <td><?php echo $participante['celular']; ?></td>
                 </tr>
               </tbody>
             </table>
@@ -92,7 +94,7 @@ if ( isset( $_SESSION['folio'] ) ) {
       </div>
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
-          <h4>Mi&eacute;rcoles - Concurso Pitch</h4>
+          <h4>Mi&eacute;rcoles - ¿Qu&eacute; est&aacute; pasando?</h4>
         </div>
       </div>
       <div class="row">
@@ -101,12 +103,12 @@ if ( isset( $_SESSION['folio'] ) ) {
             <table cellspacing="0" class="table">
               <thead>
                 <tr>
-                  <th>Título de pitch</th>
+                  <th>Empresa</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><?php echo $participante['titulo_pitch'] == ""? "No Participa": $participante['titulo_pitch']; ?></td>
+                  <td><?php echo $participante->qep['nombre'] == ""? "No Participa": $participante->qep['nombre']; ?></td>
                 </tr>
               </tbody>
             </table>

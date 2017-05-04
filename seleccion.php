@@ -8,23 +8,23 @@
 
   $error_overflow_taller = false;
   $error_overflow_visita = false;
+  $error_overflow_qep    = false;
 
   $talleres = $db->taller();
   $visitas  = $db->visita();
+  $empresas = $db->qep();
 
   if (isset($_POST['submit'])){
     extract($_POST, EXTR_PREFIX_ALL, "form");
     $talleres = $db->taller();
     $visitas  = $db->visita();
-
-    if (!$form_pitch) {
-      $form_pitch_name = "";
-    }
+    $empresas = $db->qep();
 
     $talleres_available = $talleres[$form_taller]['cupo_disponible'] - $talleres[$form_taller]['inscritos'] > 0;
-    $visitas_available = $visitas[$form_ac_viernes]['cupo_disponible'] - $visitas[$form_ac_viernes]['inscritos'] > 0;
+    $visitas_available  = $visitas[$form_ac_viernes]['cupo_disponible'] - $visitas[$form_ac_viernes]['inscritos'] > 0;
+    $empresas_available = $empresas[$form_qep]['cupo_disponible'] - $empresas[$form_qep]['inscritos'] > 0;
 
-    if ($talleres_available && $visitas_available) {
+    if ($talleres_available && $visitas_available && $empresas_available) {
       $taller_data = array(
         "inscritos" => $talleres[$form_taller]['inscritos'] + 1
       );
@@ -34,6 +34,11 @@
         "inscritos" => $visitas[$form_ac_viernes]['inscritos'] + 1
       );
       $visitas_result = $visitas[$form_ac_viernes]->update($visitas_data);
+
+      $empresas_data = array(
+        "inscritos" => $empresas[$form_qep]['inscritos'] + 1
+      );
+      $empresas_result = $empresas[$form_qep]->update($empresas_data);
 
       $participante = $db->participante();
       $data = array(
@@ -50,7 +55,9 @@
         "taller_id"  => $form_taller,
         "visita_id"  => $form_ac_viernes,
         "concurso_pitch" => isset($form_pitch)? $form_pitch : 0,
-        "titulo_pitch" => isset($form_pitch_name)? $form_pitch_name : ""
+        "titulo_pitch" => isset($form_pitch_name)? $form_pitch_name : "",
+        "qep_id" => $form_qep,
+        "celular" => $form_celular
       );
       $result = $participante->insert($data);
 
@@ -68,6 +75,8 @@
       $error_overflow_taller = true;
     } else if (!$visitas_available) {
       $error_overflow_visita = true;
+    } else if (!$empresas_available) {
+      $error_overflow_qep = true;
     }
 
   }
@@ -136,6 +145,11 @@
               <div class="help-block with-errors"></div>
             </div>
             <div class="form-group">
+              <label for="celular">N&uacute;mero de celular</label>
+              <input value="<?php echo $form_celular; ?>" type="number" class="form-control" name="celular" id="celular" data-error="Celular no v&aacute;lido" required>
+              <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
               <label for="escuela">Escuela</label>
               <input value="<?php echo $form_escuela; ?>" type="text" class="form-control" name="escuela" id="escuela" data-error="Ingresa el nombre de tu escuela" required>
               <div class="help-block with-errors"></div>
@@ -176,13 +190,17 @@
         <div class="row">
           <div class="col-sm-4 col-sm-offset-4">
             <div class="form-group">
-              <h4>Concurso de pitch</h4>
-              <label><input type="checkbox" name="pitch" id="pitch" value="1" <?php if ($form_pitch) echo "checked"; ?>> Si, deseo participar<label>
+              <h4>¿Qu&eacute; est&aacute; pasando?</h4>
             </div>
-            <div class="form-group" id="pitch_name" <?php if (!$form_pitch) echo "style=\"display: none\""; ?>>
-              <label for="pitch_name">Nombre del proyecto</label>
-              <input  type="text" class="form-control" value="<?php echo $form_pitch_name; ?>" name="pitch_name" data-error="Ingresa el nombre de tu proyecto">
-              <div class="help-block with-errors"></div>
+            <div class="form-group">
+              <label for="qep">Empresa invitada</label>
+              <select id="qep" class="form-control" name="qep">
+                <?php foreach ( $empresas as $empresa ) : ?>
+                <?php if ($empresa['cupo_disponible'] - $empresa['inscritos'] > 0) : ?>
+                <option value="<?php echo $empresa['id']; ?>" <?php if ($form_empresa == $empresa['id']) echo "selected"; ?>><?php echo $empresa['nombre']; ?> [<?php echo $empresa['cupo_disponible'] - $empresa['inscritos']; ?>]</option>
+                <?php endif; ?>
+                <?php endforeach; ?>
+              </select>
             </div>
           </div>
         </div>
@@ -236,13 +254,6 @@
     </div>
     <script type="text/javascript">
       $(document).ready(function() {
-        $('#pitch').change(function() {
-          if (this.checked) {
-            $('#pitch_name').fadeIn('slow');
-          } else {
-            $('#pitch_name').fadeOut('slow');
-          }
-        });
         if( $("#ac_viernes").val() == 100){
           $("#submit").on('click', function(e) {
             window.open("http://bit.ly/ARobo16", "_blank");

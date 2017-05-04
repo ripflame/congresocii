@@ -6,7 +6,6 @@
     header("Location: index.php");
     exit();
   } else {
-    //$participante = $db->participante->where("participante.folio_id LIKE ?", $_SESSION['folio'])->fetch();
     $stmt = $pdo->prepare("SELECT * FROM `participante` WHERE `folio_id`=:folio_id");
     $stmt->execute(array(":folio_id"=>$_SESSION['folio']));
     $participante = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -16,14 +15,6 @@
 
       $stmt = $pdo->prepare("UPDATE `folio` SET `pulsera`=:pulsera, `kit`=:kit, `registro_evento`=:registro_evento WHERE `id`=:folio");
       $result = $stmt->execute(array(":folio"=> $_SESSION['folio'], ":pulsera" => $form_pulsera, ":kit"=>$form_kit, ":registro_evento" => $form_registrado));
-
-      //$folioObj = $db->folio->where("id LIKE ? ", $_SESSION['folio'])->fetch();
-      //$data = array(
-      //  "pulsera"         => $form_pulsera,
-      //  "kit"             => $form_kit,
-      //  "registro_evento" => $form_registrado
-      //);
-      //$result = $folioObj->update($data);
 
       if ($result) {
         header("Location: registroConfirmacion.php");

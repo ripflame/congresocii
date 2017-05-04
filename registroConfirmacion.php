@@ -6,7 +6,11 @@
     header("Location: index.php");
     exit();
   } else {
-    $participante = $db->participante->where("participante.folio_id LIKE ?", $_SESSION['folio'])->fetch();
+
+    $stmt = $pdo->prepare("SELECT * FROM `participante` WHERE `folio_id`=:folio");
+    $stmt->execute(array(":folio"=>$_SESSION['folio']));
+    $participante = $stmt->fetch(PDO::FETCH_ASSOC);
+
     session_destroy();
   }
 ?>

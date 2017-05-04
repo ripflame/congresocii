@@ -45,7 +45,7 @@
       $stmt->execute(array(":inscritos"=>search_table($talleres, 'inscritos', $form_taller) + 1, ":id"=>search_table($talleres, 'id', $form_taller)));
 
       $stmt = $pdo->prepare("UPDATE `visita` SET `inscritos`=:inscritos WHERE `id`=:id");
-      $stmt->execute(array(":inscritos"=>search_table($visitas, 'inscritos', $form_visita) + 1, ":id"=>search_table($visitas, 'id', $form_visita)));
+      $stmt->execute(array(":inscritos"=>search_table($visitas, 'inscritos', $form_ac_viernes) + 1, ":id"=>search_table($visitas, 'id', $form_ac_viernes)));
 
       $stmt = $pdo->prepare("UPDATE `qep` SET `inscritos`=:inscritos WHERE `id`=:id");
       $stmt->execute(array(":inscritos"=>search_table($empresas, 'inscritos', $form_qep) + 1, ":id"=>search_table($empresas, 'id', $form_qep)));

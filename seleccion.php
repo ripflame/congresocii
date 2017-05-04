@@ -1,12 +1,4 @@
 <?php
-function search_table($array, $column, $id) {
-  foreach ($array as $row) {
-    if ($row['id'] == $id) {
-      return $row[$column];
-    }
-  }
-}
-
   include_once "config.php";
 
   session_start();
@@ -72,14 +64,14 @@ function search_table($array, $column, $id) {
         ":folio_id"   => $_SESSION['folio'],
         ":taller_id"  => $form_taller,
         ":visita_id"  => $form_ac_viernes,
-        ":qep_id" => $form_qep,
-        ":celular" => $form_celular
+        ":qep_id"     => $form_qep,
+        ":celular"    => $form_celular
       );
       $result = $stmt->execute($data);
 
       if ($result) {
-        $stmt = $pdo->prepare("UPDATE `folio` SET `registrado`=:registrado WHERE `id`=:id");
-        $data = array(":registrado" => 1, ":id" => $_SESSION['folio']);
+        $stmt    = $pdo->prepare("UPDATE `folio` SET `registrado` = :registrado WHERE `id` = :id");
+        $data    = array(":registrado"                            = > 1, ":id"             = > $_SESSION['folio']);
         $success = $stmt->execute($data);
 
         if ($success) {

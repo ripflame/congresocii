@@ -4,8 +4,9 @@ include_once "config.php";
 session_start();
 
 if ( isset( $_SESSION['folio'] ) ) {
-  $participante = $db->participante->where("participante.folio_id LIKE ?", $_SESSION['folio'])->fetch();
-  //session_destroy();
+  $stmt = $pdo->prepare("SELECT `participante`.*, `qep`.`nombre` AS `qep_nombre`, `taller`.`nombre` AS `taller_nombre`, `taller`.`descripcion`, `taller`.`duracion` AS `taller_duracion`, `visita`.`empresa`, `hora_inicio`, `visita`.`duracion` AS `empresa_duracion` FROM `participante` INNER JOIN `visita` ON `participante`.`visita_id`=`visita`.`id` INNER JOIN `taller` ON `participante`.`taller_id`=`taller`.`id` INNER JOIN `qep` ON `participante`.`qep_id`=`qep`.`id` WHERE `folio_id`=:folio");
+  $stmt->execute(array(":folio"=>$_SESSION['folio']));
+  $participante = $stmt->fetch(PDO::FETCH_ASSOC);
 } else {
   header("Location: index.php");
 }
@@ -54,7 +55,7 @@ if ( isset( $_SESSION['folio'] ) ) {
               </thead>
               <tbody>
                 <tr>
-                  <td><?php echo $participante->folio['id']; ?></td>
+                  <td><?php echo $participante['folio_id']; ?></td>
                   <td><?php echo "{$participante['nombre']} {$participante['ap_paterno']} {$participante['ap_materno']}"; ?></td>
                   <td><?php echo $participante['nacimiento']; ?></td>
                   <td><?php echo $participante['email']; ?></td>
@@ -108,7 +109,7 @@ if ( isset( $_SESSION['folio'] ) ) {
               </thead>
               <tbody>
                 <tr>
-                  <td><?php echo $participante->qep['nombre'] == ""? "No Participa": $participante->qep['nombre']; ?></td>
+                  <td><?php echo $participante['qep_nombre'] == ""? "No Participa": $participante['qep_nombre']; ?></td>
                 </tr>
               </tbody>
             </table>
@@ -133,9 +134,9 @@ if ( isset( $_SESSION['folio'] ) ) {
               </thead>
               <tbody>
                 <tr>
-                  <td><?php echo $participante->taller['nombre']; ?></td>
-                  <td><?php echo $participante->taller['descripcion']; ?></td>
-                  <td><?php echo $participante->taller['duracion']; ?></td>
+                  <td><?php echo $participante['taller_nombre']; ?></td>
+                  <td><?php echo $participante['descripcion']; ?></td>
+                  <td><?php echo $participante['taller_duracion']; ?></td>
                 </tr>
               </tbody>
             </table>
@@ -160,9 +161,9 @@ if ( isset( $_SESSION['folio'] ) ) {
               </thead>
               <tbody>
                 <tr>
-                  <td><?php echo $participante->visita['empresa']; ?></td>
-                  <td><?php echo $participante->visita['hora_inicio']; ?></td>
-                  <td><?php echo $participante->visita['duracion']; ?></td>
+                  <td><?php echo $participante['empresa']; ?></td>
+                  <td><?php echo $participante['hora_inicio']; ?></td>
+                  <td><?php echo $participante['empresa_duracion']; ?></td>
                 </tr>
               </tbody>
             </table>

@@ -71,7 +71,7 @@
 
       if ($result) {
         $stmt    = $pdo->prepare("UPDATE `folio` SET `registrado` = :registrado WHERE `id` = :id");
-        $data    = array(":registrado"                            = > 1, ":id"             = > $_SESSION['folio']);
+        $data    = array(":registrado" => 1, ":id" => $_SESSION['folio']);
         $success = $stmt->execute($data);
 
         if ($success) {

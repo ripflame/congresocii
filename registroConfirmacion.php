@@ -37,7 +37,7 @@
       </div>
       <div class="row">
         <div class="col-sm-2 col-sm-offset-5">
-          <a href="index.php" class="btn btn-default center-block">Regresar</a>
+          <a href="registroLogin.php" class="btn btn-default center-block">Regresar</a>
         </div>
         </div>
       </div>

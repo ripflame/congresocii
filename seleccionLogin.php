@@ -6,24 +6,25 @@ $login_error = false;
 if (isset($_POST['submit'])) {
   extract($_POST, EXTR_PREFIX_ALL, "form");
 
-  $result = $db->folio->where("id LIKE ?", $form_folio);
-  if(count($result) <= 0){
-    $login_error = true;
-  }
-  foreach($result as $folio) {
-    if ($folio == $form_folio && $folio['clave'] == $form_clave && !$folio['registrado']) {
+  $stmt = $pdo->prepare("SELECT * FROM `folio` WHERE `id`=:id");
+  $stmt->execute(array(':id'=>$form_folio));
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  if ($row) {
+    if ($row['id'] == $form_folio && $row['clave'] == $form_clave && !$row['registrado']) {
       session_start();
-      $_SESSION['folio'] = $folio['id'];
+      $_SESSION['folio'] = $row['id'];
       header('Location: seleccion.php');
       exit();
-	  } elseif ($folio == $form_folio && $folio['clave'] == $form_clave && $folio['registrado']) {
+    } elseif ($row['id'] == $form_folio && $row['clave'] == $form_clave && $row['registrado']) {
       session_start();
-      $_SESSION['folio'] = $folio['id'];
+      $_SESSION['folio'] = $row['id'];
       header('Location: registrado.php');
       exit();
     } else {
       $login_error = true;
     }
+  } else {
+    $login_error = true;
   }
 }
 ?>
